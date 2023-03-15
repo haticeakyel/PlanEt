@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
@@ -19,6 +19,8 @@ func SetupApp(api *Api) *fiber.App {
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
 	}))
+
+	app.Post("/register", api.HandleRegister)
 
 	return app
 }

@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	model "example.com/greetings/models"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -26,4 +27,17 @@ func NewRepository() *Repository {
 	}
 
 	return &Repository{client}
+}
+
+func (repository Repository) PostRegister(userRegister model.User) error {
+	collection := repository.client.Database("register").Collection("register")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	_, err := collection.InsertOne(ctx, userRegister)
+
+	if err != nil {
+		return err
+	}
+	return nil
 }

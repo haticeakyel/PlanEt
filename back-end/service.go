@@ -2,8 +2,11 @@ package main
 
 import (
 	"strings"
+	"time"
 
+	model "example.com/greetings/models"
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Service struct {
@@ -29,4 +32,27 @@ func GenerateUUID(length int) string {
 	}
 
 	return uuid[0:length]
+}
+
+func (s *Service) HandleRegister(userDTO model.UserDTO) *model.User {
+
+	userRegister := model.User{}
+
+	password, _ := bcrypt.GenerateFromPassword([]byte(userDTO.Password), 14)
+
+	userRegister.ID = GenerateUUID(8)
+	userRegister.Name = userDTO.Name
+	userRegister.Surname = userDTO.Surname
+	userRegister.Email = userDTO.Email
+	userRegister.Password = string(password)
+	userRegister.CreatedAt = time.Now().UTC().Round(time.Second)
+
+	err := s.Repository.PostRegister(userRegister)
+
+	if err != nil {
+		return nil
+	}
+
+	return &userRegister
+
 }
