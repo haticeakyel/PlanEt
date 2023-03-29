@@ -21,6 +21,7 @@ func SetupApp(api *Api) *fiber.App {
 	}))
 
 	app.Post("/register", api.HandleRegister)
+	app.Post("/login" ,api.LoginUser)
 
 	return app
 }

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	model "example.com/greetings/models"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -40,4 +41,19 @@ func (repository Repository) PostRegister(userRegister model.User) error {
 		return err
 	}
 	return nil
+}
+
+func (repository Repository) GetUser(email string) (model.User, error) {
+	collection := repository.client.Database("register").Collection("register")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	user := model.User{}
+	err := collection.FindOne(ctx, bson.M{"email": email}).Decode(&user)
+	
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	return user, nil
 }

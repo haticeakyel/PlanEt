@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"strings"
 	"time"
 
@@ -55,4 +56,23 @@ func (s *Service) HandleRegister(userDTO model.UserDTO) *model.User {
 
 	return &userRegister
 
+}
+
+var UserNotFoundError error = errors.New("User not found")
+
+func (service Service) PostLogin(loginUser model.UserDTO) (*model.User, error) {
+
+	userEmail, err := service.Repository.GetUser(loginUser.Email)
+
+	if err != nil {
+		return nil, UserNotFoundError
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(userEmail.Password), []byte(loginUser.Password))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &userEmail, nil
 }
