@@ -76,3 +76,26 @@ func (service Service) PostLogin(loginUser model.UserDTO) (*model.User, error) {
 
 	return &userEmail, nil
 }
+
+func (service *Service) AuthenticatedUser(email string) (*model.User, error) {
+
+    user, err := service.Repository.GetUser(email)
+
+    if err != nil {
+        return nil, UserNotFoundError
+    }
+    return &user, nil
+}
+
+func (s *Service) LogOut(userDTO model.UserDTO) (*model.User, error) {
+
+		userEmail, err := s.Repository.GetUser(userDTO.Email)
+	
+		if err != nil {
+			return nil, UserNotFoundError
+		}
+	
+		return &userEmail, nil
+	
+
+}

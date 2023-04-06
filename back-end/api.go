@@ -37,9 +37,9 @@ func (a *Api) HandleRegister(c *fiber.Ctx) error {
 	return nil
 }
 
-func (a *Api) LoginUser(c *fiber.Ctx) error {
+const SecretKey = "secret"
 
-	const SecretKey = "secret"
+func (a *Api) LoginUser(c *fiber.Ctx) error {
 
 	loginUser := model.UserDTO{}
 
@@ -81,6 +81,68 @@ func (a *Api) LoginUser(c *fiber.Ctx) error {
 		c.Status(fiber.StatusInternalServerError)
 	}
 
+	return nil
+
+}
+func (a *Api) AuthenticatedUser(c *fiber.Ctx) error {
+	cookie := c.Cookies("user_token")
+	token, err := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(t *jwt.Token) (interface{}, error) {
+		return []byte(SecretKey), nil
+	})
+
+	if err != nil {
+		c.Status(fiber.StatusUnauthorized)
+
+		return c.JSON(fiber.Map{
+			"message": "unauthententicated",
+		})
+	}
+
+	claims := token.Claims.(*jwt.StandardClaims)
+	email := claims.Issuer
+	user, err := a.Service.AuthenticatedUser(email)
+
+	switch err {
+	case nil:
+		c.JSON(user)
+	case UserNotFoundError:
+		c.Status(fiber.StatusUnauthorized)
+
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+
+	return nil
+
+}
+
+func (a *Api) LogOut(c *fiber.Ctx) error {
+
+	user := model.UserDTO{}
+	err := c.BodyParser(&user)
+
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+	}
+
+	cookie := fiber.Cookie{
+		Name:     "user_token",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
+	userLogOut, err := a.Service.LogOut(user)
+
+	switch err {
+	case nil:
+		c.JSON(userLogOut)
+		c.Status(fiber.StatusCreated)
+	default:
+		c.JSON(err.Error())
+		c.Status(fiber.StatusInternalServerError)
+	}
 	return nil
 
 }

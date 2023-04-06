@@ -20,8 +20,11 @@ func SetupApp(api *Api) *fiber.App {
 		AllowCredentials: true,
 	}))
 
+	//authentication
 	app.Post("/register", api.HandleRegister)
-	app.Post("/login" ,api.LoginUser)
+	app.Post("/login", api.LoginUser)
+	app.Get("/user", api.AuthenticatedUser)
+	app.Post("/logout", api.LogOut)
 
 	return app
 }
