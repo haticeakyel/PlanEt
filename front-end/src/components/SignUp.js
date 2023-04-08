@@ -7,6 +7,17 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
  
 
+const style = {
+
+  field: {
+    paddingBottom: "10px",
+  },
+  first:{
+    paddingBottom: "10px",
+    marginTop: "20px"
+  }
+}
+
 function SignUp(){
 
     const [showPassword, setShowPassword] = React.useState(true);
@@ -38,15 +49,15 @@ function SignUp(){
     return(
       <Container style={{maxWidth:"400px"}}>
         <div style={{display: "grid"}}>
-        <TextField id="outlined-basic" label="Name" variant="outlined" />
-        <TextField id="outlined-basic" label="Surname" variant="outlined" />
+        <TextField style={style.first} id="outlined-basic" label="Name" variant="outlined" />
+        <TextField style={style.field} id="outlined-basic" label="Surname" variant="outlined" />
         <form onSubmit={formik.handleSubmit} style={{display: "grid"}}>
-          <TextField type="email" name="email" id="email" label="Email"
+          <TextField style={style.field} type="email" name="email" id="email" label="Email"
             onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.email} />
           {formik.touched.email && formik.errors.email && (
             <span>{formik.errors.email}</span>
           )}
-          <FormControl variant="outlined">
+          <FormControl style={style.field} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
@@ -66,7 +77,7 @@ function SignUp(){
             label="Password"
           />
           </FormControl>
-          <FormControl variant="outlined">
+          <FormControl style={style.field} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">Confirm Password</InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"

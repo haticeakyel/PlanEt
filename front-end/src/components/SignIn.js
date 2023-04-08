@@ -4,24 +4,19 @@ import TextField from '@mui/material/TextField';
 import { Container, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import image from '../assets/planet.jpeg';
-/* import { withStyles } from '@mui/material/styles'; */
 
-
-/* const useStyles = withStyles((theme) => ({
-  addButton: {
-    marginBottom: "15px",
-    marginTop: "15px",
-    position: "relative",
-    width: "125px",
-    marginLeft: "80%",
-    
+const style = {
+  field: {
+    paddingBottom: "10px",
   },
-}));
- */
+  first:{
+    paddingBottom: "10px",
+    marginTop: "20px"
+  }
+}
+
 function SignIn(){
 
-  /* const classes = useStyles(); */
 
     const [showPassword, setShowPassword] = React.useState(true);
 
@@ -34,8 +29,8 @@ function SignIn(){
       <Container style={{maxWidth:"400px"}}/* className={classes.first}  style={{backgroundImage: `URL(${image})`, backgroundSize: "cover", backgroundRepeat:"no-repeat"}} */>
 
         <div style={{display: "grid", }}>
-        <TextField id="outlined-basic" label="Email" variant="outlined" />
-        <FormControl variant="outlined">
+        <TextField style={style.first} id="outlined-basic" label="Email" variant="outlined" />
+        <FormControl style={style.field} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
