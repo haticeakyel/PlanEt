@@ -11,7 +11,7 @@ const style = {
   },
   first:{
     paddingBottom: "10px",
-    marginTop: "20px"
+    marginTop: "40px"
   }
 }
 
