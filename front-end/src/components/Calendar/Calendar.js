@@ -2,6 +2,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import Header from '../Header';
 
 function FullCalendarApp() {
 
@@ -26,6 +27,7 @@ function FullCalendarApp() {
       ];
     return (
       <div className="App">
+      <Header/>
       
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
