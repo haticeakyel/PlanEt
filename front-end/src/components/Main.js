@@ -1,15 +1,11 @@
-import SignIn from "./SignIn";
-import SignUp from "./SignUp";
+import FullCalendarApp from "./Calendar/Calendar";
 
 
 function Main(){
 
     return(
-        <div style={{ display: "flex"}}>
+    <FullCalendarApp/>
         
-        <SignIn></SignIn>
-        <SignUp></SignUp>
-        </div>
     )
 }
 

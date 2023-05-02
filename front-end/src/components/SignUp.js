@@ -1,10 +1,10 @@
 import { TextField } from '@mui/material';
-import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import { Container, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
+import { registerUser } from '../api/userApi';
 
 
 const style = {
@@ -31,28 +31,21 @@ function SignUp() {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
+  const userRegister = async () => {
+    const data = {
+      name: name,
+      surname: surname,
+      email: email,
+      password: password
 
-  const validate = (values) => {
-    const errors = {}
-
-    if (!values.email) {
-      errors.email = 'Required'
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-      errors.email = 'Invalid email address'
     }
-
-    return errors
+    try {
+      await registerUser(data)
+    } catch (error) {
+      console.log(error, "error error")
+    }
   }
 
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-    },
-    validate,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2))
-    },
-  })
   return (
     <Container style={{ maxWidth: "400px" }}>
       <div style={{ display: "grid" }}>
@@ -61,19 +54,24 @@ function SignUp() {
           id="outlined-basic"
           label="Name"
           variant="outlined"
+          value={name}
           onChange={e => setName(e.target.value)}
         />
         <TextField
           style={style.field}
           id="outlined-basic"
           label="Surname" variant="outlined"
+          value={surname}
           onChange={e => setSurname(e.target.value)} />
-        <form onSubmit={formik.handleSubmit} style={{ display: "grid" }}>
-          <TextField style={style.field} type="email" name="email" id="email" label="Email"
-            onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.email} />
-          {formik.touched.email && formik.errors.email && (
-            <span>{formik.errors.email}</span>
-          )}
+        <form  style={{ display: "grid" }}>
+        
+          <TextField style={style.field} 
+          type="email" 
+          name="email" 
+          id="email" 
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          label="Email"/>
           <FormControl style={style.field} variant="outlined">
             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
             <OutlinedInput
@@ -84,7 +82,8 @@ function SignUp() {
                   <IconButton
                     aria-label="toggle password visibility"
                     onClick={handleClickShowPassword}
-
+                    onChange={e => setPassword(e.target.value)}
+                    value={password}
                     edge="end"
                   >
                     {showPassword ? <Visibility /> : <VisibilityOff />}
@@ -104,7 +103,6 @@ function SignUp() {
                   <IconButton
                     aria-label="toggle password visibility"
                     onClick={handleClickShowPassword}
-
                     edge="end"
                   >
                     {showPassword ? <Visibility /> : <VisibilityOff />}
@@ -114,7 +112,7 @@ function SignUp() {
               label="Password"
             />
           </FormControl>
-          <Button variant="contained" type='submit'>Submit</Button>
+          <Button variant="contained" type='submit' onClick={userRegister}> Submit </Button>
 
         </form>
 

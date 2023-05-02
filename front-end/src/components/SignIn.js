@@ -3,7 +3,8 @@ import TextField from '@mui/material/TextField';
 import { Container, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import React from 'react';
+import React, { useState } from 'react';
+import { loginUser } from '../api/userApi';
 import ReactDOM from 'react-dom';
 
 const style = {
@@ -20,8 +21,21 @@ function SignIn(){
 
 
     const [showPassword, setShowPassword] = React.useState(true);
-
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
     const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const userLogin = async () => {
+      const user = {
+        email: email,
+        password: password
+      }
+      try {
+        await loginUser(user)
+      } catch (error) {
+        console.log(error, "error error")
+      }
+    }
 
 
     return(
@@ -30,9 +44,10 @@ function SignIn(){
       <Container style={{maxWidth:"400px"}}/* className={classes.first}  style={{backgroundImage: `URL(${image})`, backgroundSize: "cover", backgroundRepeat:"no-repeat"}} */>
 
         <div style={{display: "grid", }}>
-        <TextField style={style.first} id="outlined-basic" label="Email" variant="outlined" />
+        <TextField style={style.first} id="outlined-basic" label="Email" variant="outlined" 
+        value={email} onChange={e => setEmail(e.target.value)} />
         <FormControl style={style.field} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+          <InputLabel htmlFor="outlined-adornment-password" value={password} onChange={e=> setPassword(e.target.value)} >Password</InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
             type={showPassword ? 'password' : 'text'}
@@ -55,7 +70,7 @@ function SignIn(){
 
 
 
-        <Button /* className={classes.addButton} */ variant="contained">Sign In</Button>
+        <Button /* className={classes.addButton} */ variant="contained" onClick={userLogin}>Sign In</Button>
       </div>
       </Container>
     );
