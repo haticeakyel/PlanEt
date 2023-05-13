@@ -45,6 +45,7 @@ func (s *Service) HandleRegister(userDTO model.UserDTO) *model.User {
 	userRegister.Name = userDTO.Name
 	userRegister.Surname = userDTO.Surname
 	userRegister.Email = userDTO.Email
+	userRegister.PhoneNumber = userDTO.PhoneNumber
 	userRegister.Password = string(password)
 	userRegister.CreatedAt = time.Now().UTC().Round(time.Second)
 
@@ -79,23 +80,22 @@ func (service Service) PostLogin(loginUser model.UserDTO) (*model.User, error) {
 
 func (service *Service) AuthenticatedUser(email string) (*model.User, error) {
 
-    user, err := service.Repository.GetUser(email)
+	user, err := service.Repository.GetUser(email)
 
-    if err != nil {
-        return nil, UserNotFoundError
-    }
-    return &user, nil
+	if err != nil {
+		return nil, UserNotFoundError
+	}
+	return &user, nil
 }
 
 func (s *Service) LogOut(userDTO model.UserDTO) (*model.User, error) {
 
-		userEmail, err := s.Repository.GetUser(userDTO.Email)
-	
-		if err != nil {
-			return nil, UserNotFoundError
-		}
-	
-		return &userEmail, nil
-	
+	userEmail, err := s.Repository.GetUser(userDTO.Email)
+
+	if err != nil {
+		return nil, UserNotFoundError
+	}
+
+	return &userEmail, nil
 
 }

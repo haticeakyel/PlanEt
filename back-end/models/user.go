@@ -14,8 +14,9 @@ type User struct {
 }
 
 type UserDTO struct {
-	Name     string `json:"name" bson:"name"`
-	Surname  string `json:"surName" bson:"surName"`
-	Email    string `json:"email" bson:"email"`
-	Password string `json:"password" bson:"password"`
+	Name        string `json:"name" bson:"name"`
+	Surname     string `json:"surName" bson:"surName"`
+	Email       string `json:"email" bson:"email"`
+	Password    string `json:"password" bson:"password"`
+	PhoneNumber string `json:"phoneNumber" bson:"phoneNumber"`
 }
