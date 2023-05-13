@@ -99,3 +99,21 @@ func (s *Service) LogOut(userDTO model.UserDTO) (*model.User, error) {
 	return &userEmail, nil
 
 }
+func (s *Service) CreateEvent(eventDTO model.EventDTO) (*model.Event, error) {
+
+	eventCreate := model.Event{
+		ID:          GenerateUUID(8),
+		Title:       eventDTO.Title,
+		Description: eventDTO.Description,
+		Status:      eventDTO.Status,
+		Duration:    eventDTO.Duration,
+	}
+
+	eventCreate, err := s.Repository.CreateEvent(eventCreate)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &eventCreate, nil
+}

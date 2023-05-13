@@ -50,10 +50,23 @@ func (repository Repository) GetUser(email string) (model.User, error) {
 
 	user := model.User{}
 	err := collection.FindOne(ctx, bson.M{"email": email}).Decode(&user)
-	
 
 	if err != nil {
 		log.Fatal(err)
 	}
 	return user, nil
+}
+
+func (repository Repository) CreateEvent(event model.Event) (model.Event, error) {
+	collection := repository.client.Database("event").Collection("event")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	_, err := collection.InsertOne(ctx, event)
+
+	if err != nil {
+		return event, err
+	}
+
+	return event, nil
 }

@@ -146,3 +146,24 @@ func (a *Api) LogOut(c *fiber.Ctx) error {
 	return nil
 
 }
+
+func (a *Api) HandleCreateEvent(c *fiber.Ctx) error {
+
+	eventDTO := model.EventDTO{}
+	err := c.BodyParser(&eventDTO)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return err
+	}
+	eventCreate, err := a.Service.CreateEvent(eventDTO)
+	switch err {
+	case nil:
+		c.JSON(eventCreate)
+		c.Status(fiber.StatusCreated)
+	default:
+		c.JSON(err.Error())
+		c.Status(fiber.StatusInternalServerError)
+	}
+
+	return nil
+}

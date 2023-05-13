@@ -20,3 +20,20 @@ type UserDTO struct {
 	Password    string `json:"password" bson:"password"`
 	PhoneNumber string `json:"phoneNumber" bson:"phoneNumber"`
 }
+
+type Event struct {
+	ID          string        `json:"id" bson:"id"`
+	Title       string        `json:"title" bson:"title"`
+	Description string        `json:"description" bson:"description"`
+	Status      bool          `json:"status" bson:"status"`
+	Duration    string        `json:"duration" bson:"duration"`
+	CreatedAt   time.Time     `json:"createdAt" bson:"createdAt"`
+	UpdatedAt   time.Time     `json:"updatedAt" bson:"updatedAt"`
+}
+
+type EventDTO struct {
+	Title       string        `json:"title" bson:"title"`
+	Description string        `json:"description" bson:"description"`
+	Status      bool          `json:"status" bson:"status"`
+	Duration    string        `json:"duration" bson:"duration"`
+}

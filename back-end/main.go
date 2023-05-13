@@ -26,5 +26,8 @@ func SetupApp(api *Api) *fiber.App {
 	app.Get("/user", api.AuthenticatedUser)
 	app.Post("/logout", api.LogOut)
 
+	//event
+	app.Post("/addEvent",api.HandleCreateEvent)
+
 	return app
 }

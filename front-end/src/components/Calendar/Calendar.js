@@ -3,28 +3,20 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import Header from '../Header';
+import React from 'react';
 
 function FullCalendarApp() {
 
-    const events = [
-        {
-          id: 1,
-          title: 'event 1',
-          start: '2023-04-14T10:00:00',
-          end: '2023-04-14T12:00:00',
-        },
-        {
-          id: 2,
-          title: 'event 2',
-          start: '2021-06-16T13:00:00',
-          end: '2021-06-16T18:00:00',
-        },
-        { 
-          id: 3, 
-          title: 'event 3', 
-          start: '2021-06-17', 
-          end: '2021-06-20' },
-      ];
+  const [events, setEvents] = React.useState([]);
+      const handleEventAdd = (eventInfo) => {
+        const newEvent = {
+          title: 'New Event',
+          start: eventInfo.startStr,
+          end: eventInfo.endStr,// Set the end date/time of the event
+        };
+    
+        setEvents([...events, newEvent]);
+      };
     return (
       <div className="App">
       <Header/>
@@ -41,13 +33,13 @@ function FullCalendarApp() {
           }}
           customButtons={{
             new: {
-              text: 'new',
-              click: () => console.log('new event'),
+              text: 'New',
+              click: handleEventAdd, // Call the handleEventAdd function when the "New" button is clicked
             },
           }}
-          initialView="dayGridMonth"
-          events={events}
-          
+          selectable={true} // Enable the ability to select a day on the calendar
+        select={handleEventAdd} // Call the handleEventAdd function when a day is selected
+        events={events}
         />
       </div>
     );
