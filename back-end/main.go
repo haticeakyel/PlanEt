@@ -27,7 +27,7 @@ func SetupApp(api *Api) *fiber.App {
 	app.Post("/logout", api.LogOut)
 
 	//event
-	app.Post("/addEvent",api.HandleCreateEvent)
+	app.Post("/events", api.HandleCreateEvent)
 
 	return app
 }
