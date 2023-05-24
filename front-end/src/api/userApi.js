@@ -26,3 +26,10 @@ export const loginUser = async ({email, password}) => {
 
     return resp.status === 201 ? resp : false
 }
+
+export const authenticatedUser = async () => {
+    const resp = await axios.get(`http://localhost:3001/user`,
+    {withCredentials: true}
+)
+return resp;
+}

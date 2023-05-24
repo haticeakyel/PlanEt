@@ -19,7 +19,9 @@ const style = {
   }
 }
 
-function SignUp() {
+function SignUp(
+  onRegister
+) {
 
   const [showPassword, setShowPassword] = React.useState(true);
   const [name, setName] = useState("");

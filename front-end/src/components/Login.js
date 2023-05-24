@@ -3,8 +3,10 @@ import TextField from '@mui/material/TextField';
 import { Container, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { loginUser } from '../api/userApi';
+import { authUser } from '../actions/userAction';
+import { connect } from "react-redux";
 
 const style = {
   field: {
@@ -16,8 +18,16 @@ const style = {
   }
 }
 
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+};
+function Login(props) {
 
-function Login() {
+  const {
+    authUser
+  } = props;
 
     const [showPassword, setShowPassword] = React.useState(true);
     const [email, setEmail] = useState("")
@@ -35,7 +45,19 @@ function Login() {
         console.log(error, "error error")
       }
     }
+    
 
+    useEffect(() => {
+      authUser()
+    }, [])
+    
+    const checkUserToken = () => {
+      if (getCookie('user_token')) {
+        return true;
+      } else {
+        return false;
+      }
+    };
   return (
    
     <Container style={{maxWidth:"400px"}}/* className={classes.first}  style={{backgroundImage: `URL(${image})`, backgroundSize: "cover", backgroundRepeat:"no-repeat"}} */>
@@ -53,7 +75,7 @@ function Login() {
             <IconButton
               aria-label="toggle password visibility"
               onClick={handleClickShowPassword}
-              
+               
               edge="end"
             >
               {showPassword ? <Visibility /> : <VisibilityOff />}
@@ -64,13 +86,20 @@ function Login() {
       />
       </FormControl>
 
-
-
-
     <Button /* className={classes.addButton} */ variant="contained" onClick={userLogin}>Sign In</Button>
   </div>
   </Container>
   );
 }
 
-export default Login;
+const mapStateToProps = (state) => ({
+  
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  authUser: () => {
+    dispatch(authUser());
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
