@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import PublicIcon from '@mui/icons-material/Public';
+import { logOutUser } from '../api/userApi';
 
 const pages = ['Calendar', 'Progress Bar'];
 const settings = ['Profile', 'Change Password', 'Logout'];
@@ -34,6 +35,16 @@ function Header() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const logOut = async () =>{
+    try {
+      await logOutUser()
+      window.location = window.location.origin + "/login";
+    } catch (error) {
+      console.log("çıkamadın", error)
+    }
+    
+  }
 
   return (
     <AppBar position="static">
@@ -111,7 +122,7 @@ function Header() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            PlanEt
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -147,11 +158,15 @@ function Header() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
-              ))}
+                <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Change Password</Typography>
+              </MenuItem>
+              <MenuItem onClick={logOut}>
+                  <Typography textAlign="center">Log Out</Typography>
+                </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

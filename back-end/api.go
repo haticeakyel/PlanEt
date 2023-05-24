@@ -118,12 +118,6 @@ func (a *Api) AuthenticatedUser(c *fiber.Ctx) error {
 
 func (a *Api) LogOut(c *fiber.Ctx) error {
 
-	user := model.UserDTO{}
-	err := c.BodyParser(&user)
-
-	if err != nil {
-		c.Status(fiber.StatusBadRequest)
-	}
 
 	cookie := fiber.Cookie{
 		Name:     "user_token",
@@ -133,16 +127,8 @@ func (a *Api) LogOut(c *fiber.Ctx) error {
 	}
 
 	c.Cookie(&cookie)
-	userLogOut, err := a.Service.LogOut(user)
-
-	switch err {
-	case nil:
-		c.JSON(userLogOut)
-		c.Status(fiber.StatusCreated)
-	default:
-		c.JSON(err.Error())
-		c.Status(fiber.StatusInternalServerError)
-	}
+	c.JSON(fiber.Map{"message": "success"})
+	c.Status(fiber.StatusOK)
 	return nil
 
 }

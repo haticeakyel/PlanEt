@@ -88,17 +88,19 @@ func (service *Service) AuthenticatedUser(email string) (*model.User, error) {
 	return &user, nil
 }
 
-func (s *Service) LogOut(userDTO model.UserDTO) (*model.User, error) {
+/*
+	 func (s *Service) LogOut(userDTO model.UserDTO) (*model.User, error) {
 
-	userEmail, err := s.Repository.GetUser(userDTO.Email)
+		userEmail, err := s.Repository.GetUser(userDTO.Email)
 
-	if err != nil {
-		return nil, UserNotFoundError
-	}
+		if err != nil {
+			return nil, UserNotFoundError
+		}
 
-	return &userEmail, nil
+		return &userEmail, nil
 
 }
+*/
 func (s *Service) CreateEvent(eventDTO model.EventDTO) (*model.Event, error) {
 
 	eventCreate := model.Event{

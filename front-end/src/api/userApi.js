@@ -33,3 +33,13 @@ export const authenticatedUser = async () => {
 )
 return resp;
 }
+
+export const logOutUser = async () => {
+    const resp = await axios({
+        method: "post",
+        url: "http://localhost:3001/logout",
+        withCredentials:true
+    });
+
+    return resp.status === 201 ? resp : false
+}
