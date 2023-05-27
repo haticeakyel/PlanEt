@@ -1,4 +1,5 @@
-import FullCalendarApp from "./Calendar/Calendar";
+import FullCalendarApp from "./Calendar";
+
 
 
 function Main(){
