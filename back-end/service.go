@@ -102,17 +102,18 @@ func (service *Service) AuthenticatedUser(email string) (*model.User, error) {
 }
 */
 func (s *Service) CreateEvent(eventDTO model.EventDTO) (*model.Event, error) {
-
 	eventCreate := model.Event{
 		ID:          GenerateUUID(8),
 		Title:       eventDTO.Title,
 		Description: eventDTO.Description,
 		Status:      eventDTO.Status,
-		Duration:    eventDTO.Duration,
+		StartDate:   eventDTO.StartDate,
+		EndDate:     eventDTO.EndDate,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
 	}
 
 	eventCreate, err := s.Repository.CreateEvent(eventCreate)
-
 	if err != nil {
 		return nil, err
 	}

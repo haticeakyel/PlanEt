@@ -1,12 +1,13 @@
 import axios from "axios";
 
-export const addEvent = async({title, description, status, duration}) => {
+export const addEventApi = async({title, description, status, startDate, endDate}) => {
 
     const resp = await axios.post("http://localhost:3001/events", {
             title: title,
             description: description,
             status: status,
-            duration: duration,
+            startDate: startDate,
+            endDate: endDate
         })
         return resp; 
 }

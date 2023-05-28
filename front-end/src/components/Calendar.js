@@ -16,10 +16,12 @@ import september from '../assets/september.jpeg';
 import october from '../assets/october.png';
 import november from '../assets/november.jpeg';
 import december from '../assets/december.jpeg';
+import AddEvent from './AddEvent';
 
 function FullCalendarApp() {
   const [events, setEvents] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [addEvent, setAddEvent] = useState(false);
 
   const handleEventAdd = (eventInfo) => {
     const newEvent = {
@@ -39,6 +41,14 @@ function FullCalendarApp() {
     }
   };
 
+  const handleNewButtonClick = () => {
+    setAddEvent(true);
+  };
+
+  const handleAddEventClose = () => {
+    setAddEvent(false);
+  };
+
   // Generate the background image URL based on the selected month
   const getSelectedMonthImage = () => {
     const imageURLs = [
@@ -53,7 +63,7 @@ function FullCalendarApp() {
       september,
       october,
       november,
-      december
+      december,
     ];
 
     if (selectedMonth !== null && selectedMonth >= 0 && selectedMonth < imageURLs.length) {
@@ -64,11 +74,18 @@ function FullCalendarApp() {
   };
 
   return (
-    <div className="App" style={{ backgroundImage: getSelectedMonthImage(), backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    width: '100vw', }}>
+    <div
+      className="App"
+      style={{
+        backgroundImage: getSelectedMonthImage(),
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        width: '100vw',
+      }}
+    >
       <Header />
+      <AddEvent open={addEvent} onClose={handleAddEventClose} />
 
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -78,7 +95,7 @@ function FullCalendarApp() {
         customButtons={{
           new: {
             text: 'New',
-            click: handleEventAdd,
+            click: handleNewButtonClick,
           },
         }}
         selectable={true}

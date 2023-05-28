@@ -1,6 +1,6 @@
 import { ADD_EVENTS } from "./types";
 
-export const addEvent = (data) => async (
+export const addEventAct = (data) => async (
     dispatch
 ) => {
         dispatch({
