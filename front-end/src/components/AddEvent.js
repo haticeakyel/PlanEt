@@ -6,6 +6,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, MobileDateTimePicker, StaticDateTimePicker } from '@mui/x-date-pickers';
 import { addEventApi } from '../api/eventApi';
 import { addEventAct } from '../actions/eventAction';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+dayjs.tz.setDefault('UTC');
 
 function AddEvent(props) {
   const {
@@ -22,20 +29,25 @@ function AddEvent(props) {
 
   const handleClick = async () => {
     const event = {
-        title,
-        description,
-        status,
-        startDateTime: startDateTime.format("YYYY-MM-DDTHH:mm:ss[Z]"),
-        endDateTime: endDateTime.format("YYYY-MM-DDTHH:mm:ss[Z]"),
-    }
-
-    await addEventApi( event).then((res) => {
-        addEventAct(res)
-        setAlert({ open: true, message: "Event added", status: "success" })
-        resetComponent()
-        onClose()
-    }).catch((err) => setAlert({ open: true, message: "error message", status: "error" }))
-}
+      title,
+      description,
+      status,
+      startDate: dayjs(startDateTime).utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+      endDate: dayjs(endDateTime).utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+    };
+  
+    await addEventApi(event)
+      .then((res) => {
+        addEventAct(res);
+        setAlert({ open: true, message: "Event added", status: "success" });
+        resetComponent();
+        onClose();
+      })
+      .catch((err) =>
+        setAlert({ open: true, message: "error message", status: "error" })
+      );
+  };
+  
 
   const isDisabled = () => {
 
