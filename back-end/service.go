@@ -120,3 +120,14 @@ func (s *Service) CreateEvent(eventDTO model.EventDTO) (*model.Event, error) {
 
 	return &eventCreate, nil
 }
+
+func (s *Service) GetEvents() ([]model.Event, error) {
+    eventsListed, err := s.Repository.GetEvents()
+
+    if err != nil {
+        return nil, err
+    }
+
+    return eventsListed, nil
+}
+

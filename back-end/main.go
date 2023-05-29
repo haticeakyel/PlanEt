@@ -28,6 +28,7 @@ func SetupApp(api *Api) *fiber.App {
 
 	//event
 	app.Post("/events", api.HandleCreateEvent)
+	app.Get("/events", api.HandleGetEvents)
 
 	return app
 }

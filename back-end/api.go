@@ -118,7 +118,6 @@ func (a *Api) AuthenticatedUser(c *fiber.Ctx) error {
 
 func (a *Api) LogOut(c *fiber.Ctx) error {
 
-
 	cookie := fiber.Cookie{
 		Name:     "user_token",
 		Value:    "",
@@ -152,4 +151,16 @@ func (a *Api) HandleCreateEvent(c *fiber.Ctx) error {
 	}
 
 	return nil
+}
+
+func (a *Api) HandleGetEvents(c *fiber.Ctx) error {
+	events, err := a.Service.GetEvents()
+
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch events",
+		})
+	}
+
+	return c.JSON(events)
 }
