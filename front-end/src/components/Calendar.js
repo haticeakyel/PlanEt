@@ -20,9 +20,14 @@ import AddEvent from './AddEvent';
 import { fetchEvents } from '../actions/eventAction';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import EventList from './EventList';
 
-function FullCalendarApp() {
-  const [events, setEvents] = useState([]);
+function FullCalendarApp(props) {
+  const {
+    fetchEvents,
+    events
+  } = props;
+
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [addEvent, setAddEvent] = useState(false);
 
@@ -33,7 +38,7 @@ function FullCalendarApp() {
       end: eventInfo.endStr,
     };
 
-    setEvents([...events, newEvent]);
+    
   };
 
   const handleDatesSet = (dateInfo) => {
@@ -83,9 +88,18 @@ function FullCalendarApp() {
     if (!hasCookie) {
       navigate('/login');
     }
+    else{
+      
+    }
   }, [navigate]);
 
+  useEffect(() => {
+    fetchEvents()
+  }, [])
   return (
+    <>
+    <EventList
+    />
     <div
       className="App"
       style={{
@@ -112,18 +126,27 @@ function FullCalendarApp() {
         }}
         selectable={true}
         select={handleEventAdd}
-        events={events}
+        events={events && events.events.map((event) => ({
+          title: event.title,
+          start: event.startDate,
+          end: event.endDate,
+        }))}
         datesSet={handleDatesSet}
       />
     </div>
+    </>
   );
 }
 const mapStateToProps = (state) => ({
-  
+  events: state.events, 
+  user: state.user
 });
 
+
 const mapDispatchToProps = (dispatch) => ({
-  
+  fetchEvents: () =>{
+    dispatch(fetchEvents());
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FullCalendarApp);

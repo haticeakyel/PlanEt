@@ -10,13 +10,12 @@ export const addEventAct = (data) => async (
         });
 };
 
-export const fetchEvents = (id) => async (
+export const fetchEvents = () => async (
     dispatch
 ) => {
-    const res = await listEventApi(id);
-    if (res)
+    const resp = await listEventApi();
         dispatch({
             type: GET_EVENTS,
-            payload: res,
+            payload: resp.data,
         });
 };

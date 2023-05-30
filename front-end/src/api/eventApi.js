@@ -19,7 +19,7 @@ export const addEventApi = async ({ title, description, status, startDate, endDa
   return resp;
 };
 
-export const listEventApi = async ({}) => {
+export const listEventApi = async () => {
 
     const resp = await axios.get('http://localhost:3001/events');
     return resp;
