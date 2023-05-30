@@ -41,6 +41,9 @@ function Login(props) {
       }
       try {
         await loginUser(user)
+        setTimeout(() => {
+          window.location = window.location.origin + "/";
+        }, 500);
       } catch (error) {
         console.log(error, "error error")
       }
@@ -51,13 +54,15 @@ function Login(props) {
       authUser()
     }, [])
     
-    const checkUserToken = () => {
-      if (getCookie('user_token')) {
-        return true;
+    const checkUserSession = () => {
+      const loggedInUser = document.cookie.includes("user_token");
+    
+      if (loggedInUser) {
+        window.location = window.location.origin + "/";
       } else {
-        return false;
       }
     };
+    checkUserSession();
   return (
    
     <Container style={{maxWidth:"400px"}}/* className={classes.first}  style={{backgroundImage: `URL(${image})`, backgroundSize: "cover", backgroundRepeat:"no-repeat"}} */>
@@ -93,7 +98,7 @@ function Login(props) {
 }
 
 const mapStateToProps = (state) => ({
-  
+
 });
 
 const mapDispatchToProps = (dispatch) => ({

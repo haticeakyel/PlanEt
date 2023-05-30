@@ -3,7 +3,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import Header from './Header';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import january from '../assets/january.jpeg';
 import february from '../assets/february.jpeg';
 import march from '../assets/march.jpeg';
@@ -19,6 +19,7 @@ import december from '../assets/december.jpeg';
 import AddEvent from './AddEvent';
 import { fetchEvents } from '../actions/eventAction';
 import { connect } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 function FullCalendarApp() {
   const [events, setEvents] = useState([]);
@@ -74,6 +75,15 @@ function FullCalendarApp() {
 
     return null;
   };
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const hasCookie = document.cookie.includes('user_token');
+    if (!hasCookie) {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   return (
     <div

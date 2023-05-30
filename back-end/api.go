@@ -63,7 +63,7 @@ func (a *Api) LoginUser(c *fiber.Ctx) error {
 		Name:     "user_token",
 		Value:    token,
 		Expires:  time.Now().Add(time.Hour * 24),
-		HTTPOnly: true,
+		HTTPOnly: false,
 	}
 
 	c.Cookie(&cookie)
