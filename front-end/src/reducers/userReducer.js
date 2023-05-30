@@ -1,8 +1,8 @@
 import { USER } from "../actions/types";
-const UserReducer = (state = [], action) => {
+const UserReducer = (state = {}, action) => {
     switch (action.type) {
         case USER:
-            return  [...state, action.payload];
+            return  {...action.payload};
             
         default:
             return state

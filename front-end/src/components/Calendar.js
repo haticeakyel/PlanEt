@@ -17,6 +17,8 @@ import october from '../assets/october.png';
 import november from '../assets/november.jpeg';
 import december from '../assets/december.jpeg';
 import AddEvent from './AddEvent';
+import { fetchEvents } from '../actions/eventAction';
+import { connect } from 'react-redux';
 
 function FullCalendarApp() {
   const [events, setEvents] = useState([]);
@@ -106,5 +108,12 @@ function FullCalendarApp() {
     </div>
   );
 }
+const mapStateToProps = (state) => ({
+  
+});
 
-export default FullCalendarApp;
+const mapDispatchToProps = (dispatch) => ({
+  
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(FullCalendarApp);
