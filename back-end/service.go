@@ -141,3 +141,14 @@ func (s *Service) GetEvent(ID string) (*model.Event, error) {
 
 	return updatedEvent, nil
 }
+
+func (s *Service) DeleteEvent(ID string) error {
+
+	err := s.Repository.DeleteEvent(ID)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

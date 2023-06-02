@@ -105,3 +105,17 @@ func (repository *Repository) GetEvent(ID string) (*model.Event, error) {
 
 	return entity, nil
 }
+
+func (repository *Repository) DeleteEvent(ID string) error {
+	collection := repository.client.Database("event").Collection("event")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	deleteEvent := collection.FindOneAndDelete(ctx, bson.M{"id": ID})
+
+	if deleteEvent != nil {
+		return deleteEvent.Err()
+	}
+
+	return nil
+}

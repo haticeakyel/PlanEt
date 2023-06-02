@@ -180,3 +180,18 @@ func (a *Api) HandleGetEvent(c *fiber.Ctx) error {
 
 	return nil
 }
+
+func (a *Api) HandleDeleteEvent(c *fiber.Ctx) error {
+	ID := c.Params("id")
+
+	err := a.Service.DeleteEvent(ID)
+
+	switch err {
+	case nil:
+		c.Status(fiber.StatusNoContent)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+
+	return nil
+}

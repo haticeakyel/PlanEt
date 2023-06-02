@@ -30,6 +30,7 @@ func SetupApp(api *Api) *fiber.App {
 	app.Post("/events", api.HandleCreateEvent)
 	app.Get("/events", api.HandleGetEvents)
 	app.Get("/events/:id", api.HandleGetEvent)
+	app.Delete("events/:id", api.HandleDeleteEvent)
 
 	return app
 }
