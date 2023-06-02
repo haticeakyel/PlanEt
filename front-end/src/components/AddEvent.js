@@ -8,6 +8,7 @@ import { addEventApi } from '../api/eventApi';
 import { addEventAct } from '../actions/eventAction';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { connect } from 'react-redux';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -17,7 +18,8 @@ dayjs.tz.setDefault('UTC');
 function AddEvent(props) {
   const {
     open,
-    onClose
+    onClose,
+    addEventAct
   } = props
 
   const [title, setTitle] = useState("")
@@ -38,7 +40,7 @@ function AddEvent(props) {
   
     await addEventApi(event)
       .then((res) => {
-        addEventAct(res);
+        addEventAct(res.data);
         setAlert({ open: true, message: "Event added", status: "success" });
         resetComponent();
         onClose();
@@ -154,4 +156,15 @@ function AddEvent(props) {
   )
 }
 
-export default AddEvent;
+const mapStateToProps = (state) => ({
+ 
+});
+
+
+const mapDispatchToProps = (dispatch) => ({
+  addEventAct: (data) =>{
+    dispatch(addEventAct(data));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddEvent);

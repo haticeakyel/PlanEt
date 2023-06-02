@@ -21,15 +21,22 @@ import { fetchEvents } from '../actions/eventAction';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import EventList from './EventList';
+import { authUser } from '../actions/userAction';
+import { IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteEvent from './DeleteEvent';
 
 function FullCalendarApp(props) {
   const {
     fetchEvents,
-    events
+    events,
+    authUser
   } = props;
 
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [addEvent, setAddEvent] = useState(false);
+  const [deleteEvent, setDeleteEvent] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const handleEventAdd = (eventInfo) => {
     const newEvent = {
@@ -56,6 +63,16 @@ function FullCalendarApp(props) {
   const handleAddEventClose = () => {
     setAddEvent(false);
   };
+
+  const handleDeleteEventClose = () => {
+    setDeleteEvent(false);
+  };
+
+  const handleEventDelete = (eventId) => {
+    setSelectedEvent(eventId);
+    setDeleteEvent(true);
+  };
+  
 
   // Generate the background image URL based on the selected month
   const getSelectedMonthImage = () => {
@@ -94,59 +111,86 @@ function FullCalendarApp(props) {
   }, [navigate]);
 
   useEffect(() => {
-    fetchEvents()
-  }, [])
+    fetchEvents();
+    authUser();
+  }, []);
+
   return (
     <>
-    <EventList
-    />
-    <div
-      className="App"
-      style={{
-        backgroundImage: getSelectedMonthImage(),
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        width: '100vw',
-      }}
-    >
-      <Header />
-      <AddEvent open={addEvent} onClose={handleAddEventClose} />
+      <EventList />
+      <div
+        className="App"
+        style={{
+          backgroundImage: getSelectedMonthImage(),
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          width: '100vw',
+        }}
+      >
+        <Header />
+        <AddEvent open={addEvent} onClose={handleAddEventClose} />
 
-      <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        headerToolbar={{
-          center: 'dayGridMonth,timeGridWeek,timeGridDay new',
-        }}
-        customButtons={{
-          new: {
-            text: 'New',
-            click: handleNewButtonClick,
-          },
-        }}
-        selectable={true}
-        select={handleEventAdd}
-        events={events && events.events.map((event) => ({
-          title: event.title,
-          start: event.startDate,
-          end: event.endDate,
-        }))}
-        datesSet={handleDatesSet}
-      />
-    </div>
+        <FullCalendar 
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          headerToolbar={{
+            center: 'dayGridMonth,timeGridWeek,timeGridDay new',
+          }}
+          customButtons={{
+            new: {
+              text: 'New',
+              click: handleNewButtonClick,
+            },
+          }}
+          selectable={true}
+          select={handleEventAdd}
+          events={events.events && events.events.map((event) => ({
+            title: event.title,
+            start: event.startDate,
+            end: event.endDate,
+            id: event.id,
+          }))}
+          eventContent={(eventContent) => (
+            <div
+              style={{
+                backgroundColor: `rgba(0, 0, 0, 0.5)`, // Set the background color to transparent
+                padding: '4px',
+              }}
+            >
+              <div>{eventContent.timeText}</div>
+              <div>{eventContent.event.title}</div>
+              <IconButton
+                aria-label="delete"
+                size="small"
+                
+                onClick={() => handleEventDelete(eventContent.event.id)}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </div>
+          )}
+          datesSet={handleDatesSet}
+        />
+      </div>
+      {deleteEvent && selectedEvent && (
+        <DeleteEvent open={deleteEvent} onClose={handleDeleteEventClose} id={selectedEvent} />
+      )}
     </>
   );
 }
+
 const mapStateToProps = (state) => ({
   events: state.events, 
   user: state.user
 });
 
-
 const mapDispatchToProps = (dispatch) => ({
-  fetchEvents: () =>{
+  fetchEvents: () => {
     dispatch(fetchEvents());
-  }
+  },
+  authUser: () => {
+    dispatch(authUser());
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FullCalendarApp);
