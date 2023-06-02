@@ -72,22 +72,36 @@ func (repository Repository) CreateEvent(event model.Event) (model.Event, error)
 }
 
 func (repository Repository) GetEvents() ([]model.Event, error) {
-    collection := repository.client.Database("event").Collection("event")
-    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-    defer cancel()
+	collection := repository.client.Database("event").Collection("event")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 
-    // Query the MongoDB collection and retrieve the events
-    cursor, err := collection.Find(ctx, bson.M{})
-    if err != nil {
-        return nil, err
-    }
-    defer cursor.Close(ctx)
+	// Query the MongoDB collection and retrieve the events
+	cursor, err := collection.Find(ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
 
-    var events []model.Event
-    if err := cursor.All(ctx, &events); err != nil {
-        return nil, err
-    }
+	var events []model.Event
+	if err := cursor.All(ctx, &events); err != nil {
+		return nil, err
+	}
 
-    return events, nil
+	return events, nil
 }
 
+func (repository *Repository) GetEvent(ID string) (*model.Event, error) {
+	collection := repository.client.Database("event").Collection("event")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	entity := &model.Event{}
+	filters := bson.M{"id": ID}
+	err := collection.FindOne(ctx, filters).Decode(entity)
+	if err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}

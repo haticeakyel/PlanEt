@@ -122,12 +122,22 @@ func (s *Service) CreateEvent(eventDTO model.EventDTO) (*model.Event, error) {
 }
 
 func (s *Service) GetEvents() ([]model.Event, error) {
-    eventsListed, err := s.Repository.GetEvents()
+	eventsListed, err := s.Repository.GetEvents()
 
-    if err != nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 
-    return eventsListed, nil
+	return eventsListed, nil
 }
 
+func (s *Service) GetEvent(ID string) (*model.Event, error) {
+
+	updatedEvent, err := s.Repository.GetEvent(ID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return updatedEvent, nil
+}

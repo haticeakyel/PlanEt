@@ -164,3 +164,19 @@ func (a *Api) HandleGetEvents(c *fiber.Ctx) error {
 
 	return c.JSON(events)
 }
+
+func (a *Api) HandleGetEvent(c *fiber.Ctx) error {
+	ID := c.Params("id")
+
+	event, err := a.Service.GetEvent(ID)
+
+	switch err {
+	case nil:
+		c.JSON(event)
+		c.Status(fiber.StatusOK)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+
+	return nil
+}
