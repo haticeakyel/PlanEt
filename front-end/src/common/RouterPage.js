@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Main from "../components/Main";
 import SignUp from "../components/SignUp";
 import Login from "../components/Login";
+import Profile from "../components/Profile";
 
 const RouterPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -30,6 +31,7 @@ const RouterPage = () => {
       <Route path="/register" Component={SignUp} onRegister={onRegister}/>
       <Route path="/login" Component={Login} onLogin={onLogin} />
       <Route path="/main" element={isLoggedIn ? <Main /> : <Navigate to="/" />} />
+      <Route path="/profile" Component={Profile}/>
       </Routes>
           
     </BrowserRouter>

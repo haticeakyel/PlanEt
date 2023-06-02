@@ -13,11 +13,16 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import PublicIcon from '@mui/icons-material/Public';
 import { logOutUser } from '../api/userApi';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { authUser } from '../actions/userAction';
+import {  deepPurple } from '@mui/material/colors';
 
 const pages = ['Calendar', 'Progress Bar'];
 const settings = ['Profile', 'Change Password', 'Logout'];
 
-function Header() {
+function Header(props) {
+  const {user} = props
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -47,7 +52,7 @@ function Header() {
   }
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: '#4a148c' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <PublicIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -139,7 +144,9 @@ function Header() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="" src="" />
+              <Avatar sx={{ bgcolor: deepPurple[500]}}>
+              {user && user.name && user.surName && `${user.name.charAt(0)}${user.surName.charAt(0)}`}
+            </Avatar>            
               </IconButton>
             </Tooltip>
             <Menu
@@ -158,7 +165,7 @@ function Header() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-                <MenuItem onClick={handleCloseUserMenu}>
+                <MenuItem onClick={handleCloseUserMenu} component={Link} to="/profile">
                   <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>
@@ -174,4 +181,14 @@ function Header() {
     </AppBar>
   );
 }
-export default Header;
+const mapStateToProps = (state) => ({
+  user: state.user
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  authUser: () => {
+    dispatch(authUser());
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
