@@ -19,7 +19,7 @@ import { authUser } from '../actions/userAction';
 import {  deepPurple } from '@mui/material/colors';
 
 const pages = ['Calendar', 'Progress Bar'];
-const settings = ['Profile', 'Change Password', 'Logout'];
+const settings = ['Profile','Logout'];
 
 function Header(props) {
   const {user} = props
@@ -176,9 +176,6 @@ function Header(props) {
                 <MenuItem onClick={handleCloseUserMenu} component={Link} to="/profile">
                   <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
-                <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Change Password</Typography>
-              </MenuItem>
               <MenuItem onClick={logOut}>
                   <Typography textAlign="center">Log Out</Typography>
                 </MenuItem>

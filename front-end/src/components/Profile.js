@@ -6,14 +6,30 @@ import { authUser } from '../actions/userAction';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, CircularProgress, withStyles } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, CircularProgress, withStyles, makeStyles } from '@material-ui/core';
 import {  pink } from '@mui/material/colors';
+import planets from '../assets/planets.png'
+
+const useStyles = makeStyles((theme) => ({
+  img: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    minWidth: "100%",
+    minHeight: "100%",
+    zIndex: -1,
+    background: "#110313",
+    mixBlendMode: "overlay",
+    opacity:0.4
+  }
+}));
 
 function Profile(props) {
   const {
     authUser,
     user
   } = props;
+  const classes = useStyles();
 
   const [isLoading, setIsLoading] = useState(false);
   const [quote, setQuote] = useState('');
@@ -61,6 +77,7 @@ function Profile(props) {
 
   return (
     <>
+      <img src={planets} className={classes.img} /> 
     <Header />
     <div className="App" style={{ justifyContent: "center", display: "flex", flexDirection: "column"}}>
     

@@ -6,9 +6,10 @@ import { authUser } from '../actions/userAction';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, CircularProgress, withStyles } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, DialogContent, CircularProgress, withStyles } from '@material-ui/core';
 import { pink } from '@mui/material/colors';
 import { fetchEvents } from '../actions/eventAction';
+import planets from '../assets/planets.png'
 
 const styles = (theme) => ({
   root: {
@@ -29,11 +30,21 @@ const styles = (theme) => ({
     fill: theme.palette.text.primary,
     position: 'absolute',
   },
+  img: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    minWidth: "100%",
+    minHeight: "100%",
+    zIndex: -1,
+    background: "#110313",
+    mixBlendMode: "overlay",
+    opacity:0.4
+  }
 });
 
 function ProgressBar(props) {
   const { fetchEvents, events, classes } = props;
-
   const [isLoading, setIsLoading] = useState(false);
   const [quote, setQuote] = useState('');
   const [open, setOpen] = useState(false);
@@ -68,6 +79,7 @@ function ProgressBar(props) {
 
   return (
     <>
+    <img src={planets} className={classes.img} /> 
       <div className="App" style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column' }}>
         <Header />
         <h1>Your Progress </h1>
