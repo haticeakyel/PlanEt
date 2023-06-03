@@ -44,8 +44,6 @@ function FullCalendarApp(props) {
       start: eventInfo.startStr,
       end: eventInfo.endStr,
     };
-
-    
   };
 
   const handleDatesSet = (dateInfo) => {
@@ -72,7 +70,6 @@ function FullCalendarApp(props) {
     setSelectedEvent(eventId);
     setDeleteEvent(true);
   };
-  
 
   // Generate the background image URL based on the selected month
   const getSelectedMonthImage = () => {
@@ -104,34 +101,34 @@ function FullCalendarApp(props) {
     const hasCookie = document.cookie.includes('user_token');
     if (!hasCookie) {
       navigate('/login');
+    } else {
+      fetchEvents();
+      authUser();
     }
-    else{
-      
-    }
-  }, [navigate]);
-
-  useEffect(() => {
-    fetchEvents();
-    authUser();
-  }, []);
+  }, [navigate, fetchEvents, authUser]);
 
   return (
     <>
-      <EventList />
-      <div
-        className="App"
-        style={{
-          backgroundImage: getSelectedMonthImage(),
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          width: '100vw',
-        }}
-      >
-        <Header />
+      <Header />
+      <div className="App" style={{ position: 'relative', }}>
+        <div
+          style={{
+            backgroundImage: getSelectedMonthImage(),
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            width: '100%',
+            height: '100%',
+            opacity: 0.5,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            zIndex: -1,
+          }}
+        ></div>
         <AddEvent open={addEvent} onClose={handleAddEventClose} />
 
-        <FullCalendar 
+        <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           headerToolbar={{
             center: 'dayGridMonth,timeGridWeek,timeGridDay new',
@@ -153,7 +150,7 @@ function FullCalendarApp(props) {
           eventContent={(eventContent) => (
             <div
               style={{
-                backgroundColor: `rgba(0, 0, 0, 0.5)`, // Set the background color to transparent
+                backgroundColor: 'rgba(0, 0, 0, 0.5)', // Set the background color to transparent
                 padding: '4px',
               }}
             >
@@ -162,7 +159,6 @@ function FullCalendarApp(props) {
               <IconButton
                 aria-label="delete"
                 size="small"
-                
                 onClick={() => handleEventDelete(eventContent.event.id)}
               >
                 <DeleteIcon fontSize="small" />
@@ -180,7 +176,7 @@ function FullCalendarApp(props) {
 }
 
 const mapStateToProps = (state) => ({
-  events: state.events, 
+  events: state.events,
   user: state.user
 });
 
@@ -190,7 +186,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   authUser: () => {
     dispatch(authUser());
-  },
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FullCalendarApp);
