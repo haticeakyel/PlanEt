@@ -61,9 +61,10 @@ function Profile(props) {
 
   return (
     <>
-    <div className="App" style={{ justifyContent: "center", display: "flex", flexDirection: "column"}}>
     <Header />
-    <h1>Your Profile</h1>
+    <div className="App" style={{ justifyContent: "center", display: "flex", flexDirection: "column"}}>
+    
+    <h1 style={{display:"flex", justifyContent:"center"}}>Your Profile</h1>
     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
       <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', border: '1px solid black', borderRadius: '4px' }}>
         {[
@@ -79,7 +80,6 @@ function Profile(props) {
         ))}
       </List>
     </div>
-    <Button style={{color: pink[500]}} onClick={fetchQuote}>Shuffle an Inspiring Sentence!</Button>
     <SquareDialog open={open} onClose={handleClose}>
         <DialogTitle style={{ color: '#1a237e' }}>Today's Quote</DialogTitle>
         <DialogContent>
@@ -89,6 +89,8 @@ function Profile(props) {
         </DialogContent>
       </SquareDialog>
   </div>
+
+  <Button style={{color: pink[500],justifyContent:"center"}} fullWidth onClick={fetchQuote}>Shuffle an Inspiring Sentence!</Button>
   
      
     </>

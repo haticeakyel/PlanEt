@@ -4,6 +4,7 @@ import Main from "../components/Main";
 import SignUp from "../components/SignUp";
 import Login from "../components/Login";
 import Profile from "../components/Profile";
+import ProgressBar from "../components/ProgressBar";
 
 const RouterPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,6 +33,7 @@ const RouterPage = () => {
       <Route path="/login" Component={Login} onLogin={onLogin} />
       <Route path="/main" element={isLoggedIn ? <Main /> : <Navigate to="/" />} />
       <Route path="/profile" Component={Profile}/>
+      <Route path="/progressBar" Component={ProgressBar}/>
       </Routes>
           
     </BrowserRouter>

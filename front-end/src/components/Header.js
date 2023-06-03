@@ -103,11 +103,12 @@ function Header(props) {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+            <MenuItem onClick={handleCloseUserMenu} component={Link} to="/main">
+            <Typography textAlign="center">Calendar</Typography>
+          </MenuItem>
+          <MenuItem onClick={handleCloseUserMenu} component={Link} to="/progressBar">
+          <Typography textAlign="center">Progress Bar</Typography>
+        </MenuItem>
             </Menu>
           </Box>
           <PublicIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -130,15 +131,22 @@ function Header(props) {
             PlanEt
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                component={Link}
+                to="/main"
                 sx={{ my: 2, color: 'white', display: 'block' }}
+                
               >
-                {page}
+               Calendar
               </Button>
-            ))}
+              <Button
+              component={Link}
+                to="/progressBar"
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+             Progress Bar
+            </Button>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
