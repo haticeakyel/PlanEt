@@ -20,7 +20,6 @@ import AddEvent from './AddEvent';
 import { fetchEvents } from '../actions/eventAction';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import EventList from './EventList';
 import { authUser } from '../actions/userAction';
 import { Dialog, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -30,7 +29,8 @@ function FullCalendarApp(props) {
   const {
     fetchEvents,
     events,
-    authUser
+    authUser,
+    userId
   } = props;
 
   const [selectedMonth, setSelectedMonth] = useState(null);
@@ -107,7 +107,7 @@ function FullCalendarApp(props) {
     if (!hasCookie) {
       navigate('/login');
     } else {
-      fetchEvents();
+      fetchEvents(userId);
       authUser();
     }
   }, [navigate, fetchEvents, authUser]);
@@ -183,12 +183,13 @@ function FullCalendarApp(props) {
 
 const mapStateToProps = (state) => ({
   events: state.events,
-  user: state.user
+  user: state.user,
+  userId: state.user.id
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchEvents: () => {
-    dispatch(fetchEvents());
+  fetchEvents: (userId) => {
+    dispatch(fetchEvents(userId));
   },
   authUser: () => {
     dispatch(authUser());

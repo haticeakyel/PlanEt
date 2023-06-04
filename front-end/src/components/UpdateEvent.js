@@ -89,7 +89,7 @@ function AddEvent(props) {
   return (
     <div>
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle style={{ textAlign: "center" }} id="add-new-event-dialog-title">Add New Event</DialogTitle>
+      <DialogTitle style={{ textAlign: "center" }} id="add-new-event-dialog-title">Update Event</DialogTitle>
       <DialogContent>
 
         <TextField
@@ -142,7 +142,7 @@ function AddEvent(props) {
           color="primary"
           disabled={isDisabled()}
         >
-          Add
+          Update
         </Button>
       </DialogActions>
     </Dialog>

@@ -1,5 +1,5 @@
 import { listEventApi, deleteEventApi } from "../api/eventApi";
-import { ADD_EVENTS, DELETE_EVENT, GET_EVENTS } from "./types";
+import { ADD_EVENTS, DELETE_EVENT, GET_EVENTS, UPDATE_EVENT } from "./types";
 
 export const addEventAct = (data) => async (
     dispatch
@@ -10,19 +10,21 @@ export const addEventAct = (data) => async (
         });
 };
 
-export const fetchEvents = () => async (
+export const fetchEvents = (userId) => async (
     dispatch
 ) => {
-    const resp = await listEventApi();
+    const resp = await listEventApi(
+      userId
+    );
         dispatch({
             type: GET_EVENTS,
             payload: resp.data,
         });
 };
 
-export const deleteEvent = (id) => async (dispatch) => {
+export const deleteEvent = (userId,id) => async (dispatch) => {
     try {
-      const success = await deleteEventApi(id);
+      const success = await deleteEventApi(userId,id);
       if (success) {
         dispatch({
           type: DELETE_EVENT,
@@ -33,3 +35,12 @@ export const deleteEvent = (id) => async (dispatch) => {
     } catch (error) {
     }
   };
+
+  export const updateEvent = (event) => async (
+    dispatch
+) => {
+    dispatch({
+        type: UPDATE_EVENT,
+        payload: event,
+    });
+};

@@ -1,7 +1,5 @@
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, Snackbar, Switch, TextField } from '@mui/material'
 import React, { useState } from 'react'
-import dayjs from 'dayjs';
-import { addEventApi } from '../api/eventApi';
 import { deleteEvent } from '../actions/eventAction';
 import { connect } from 'react-redux';
 
@@ -10,7 +8,8 @@ function DeleteEvent(props) {
     id,
     open,
     onClose,
-    deleteEvent
+    deleteEvent,
+    userId
   } = props
 
   const [deleteAlert, setDeleteAlert] = useState(
@@ -40,8 +39,7 @@ function DeleteEvent(props) {
           <Button onClick={() => {
             onClose()
             setDeleteAlert({open: true, message: "Event Deleted", status: "success"})
-            console.log(id,"dhdhd")
-            deleteEvent(id)
+            deleteEvent(userId,id)
           }}
          autoFocus
          >
@@ -61,13 +59,14 @@ function DeleteEvent(props) {
 }
 
 const mapStateToProps = (state) => ({
- event:state.event
+ event:state.event,
+ userId: state.user.id
 });
 
 
 const mapDispatchToProps = (dispatch) => ({
-  deleteEvent: (id) =>{
-    dispatch(deleteEvent(id));
+  deleteEvent: (userId,id) =>{
+    dispatch(deleteEvent(userId,id));
   },
 });
 
