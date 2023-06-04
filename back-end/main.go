@@ -27,10 +27,10 @@ func SetupApp(api *Api) *fiber.App {
 	app.Post("/logout", api.LogOut)
 
 	//event
-	app.Post("/events", api.HandleCreateEvent)
-	app.Get("/events", api.HandleGetEvents)
-	app.Get("/events/:id", api.HandleGetEvent)
-	app.Delete("/events/:id", api.HandleDeleteEvent)
+	app.Post("/users/:userId/events", api.HandleCreateEvent)
+	app.Get("/users/:userId/events", api.HandleGetEvents)
+	app.Get("/users/:userId/events/:id", api.HandleGetEvent)
+	app.Delete("/users/:userId/events/:id", api.HandleDeleteEvent)
 
 	return app
 }

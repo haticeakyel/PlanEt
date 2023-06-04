@@ -133,6 +133,7 @@ func (a *Api) LogOut(c *fiber.Ctx) error {
 }
 
 func (a *Api) HandleCreateEvent(c *fiber.Ctx) error {
+	userId := c.Params("userId")
 
 	eventDTO := model.EventDTO{}
 	err := c.BodyParser(&eventDTO)
@@ -140,21 +141,22 @@ func (a *Api) HandleCreateEvent(c *fiber.Ctx) error {
 		c.Status(fiber.StatusBadRequest)
 		return err
 	}
-	eventCreate, err := a.Service.CreateEvent(eventDTO)
+	eventCreate, err := a.Service.CreateEvent(eventDTO, userId)
 	switch err {
 	case nil:
 		c.JSON(eventCreate)
 		c.Status(fiber.StatusCreated)
 	default:
-		c.JSON(err.Error())
 		c.Status(fiber.StatusInternalServerError)
+		c.JSON(fiber.Map{"error": err.Error()})
 	}
 
 	return nil
 }
 
 func (a *Api) HandleGetEvents(c *fiber.Ctx) error {
-	events, err := a.Service.GetEvents()
+	userId := c.Params("userId")
+	events, err := a.Service.GetEvents(userId)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -166,9 +168,10 @@ func (a *Api) HandleGetEvents(c *fiber.Ctx) error {
 }
 
 func (a *Api) HandleGetEvent(c *fiber.Ctx) error {
+	userId := c.Params("userId")
 	ID := c.Params("id")
 
-	event, err := a.Service.GetEvent(ID)
+	event, err := a.Service.GetEvent(userId,ID)
 
 	switch err {
 	case nil:
@@ -182,9 +185,10 @@ func (a *Api) HandleGetEvent(c *fiber.Ctx) error {
 }
 
 func (a *Api) HandleDeleteEvent(c *fiber.Ctx) error {
+	userId := c.Params("userId")
 	ID := c.Params("id")
 
-	err := a.Service.DeleteEvent(ID)
+	err := a.Service.DeleteEvent(userId, ID)
 
 	switch err {
 	case nil:

@@ -7,6 +7,7 @@ import (
 
 	model "example.com/greetings/models"
 	"github.com/google/uuid"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -101,28 +102,29 @@ func (service *Service) AuthenticatedUser(email string) (*model.User, error) {
 
 }
 */
-func (s *Service) CreateEvent(eventDTO model.EventDTO) (*model.Event, error) {
+func (s *Service) CreateEvent(eventDTO model.EventDTO, userId string) (*model.Event, error) {
 	eventCreate := model.Event{
 		ID:          GenerateUUID(8),
+		UserId:      userId,
 		Title:       eventDTO.Title,
 		Description: eventDTO.Description,
 		Status:      eventDTO.Status,
 		StartDate:   eventDTO.StartDate,
 		EndDate:     eventDTO.EndDate,
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
+		CreatedAt:   primitive.NewDateTimeFromTime(time.Now().UTC().Round(time.Second)),
+		UpdatedAt:   primitive.NewDateTimeFromTime(time.Now().UTC().Round(time.Second)),
 	}
 
-	eventCreate, err := s.Repository.CreateEvent(eventCreate)
+	eventCreated, err := s.Repository.CreateEvent(userId, eventCreate)
 	if err != nil {
 		return nil, err
 	}
 
-	return &eventCreate, nil
+	return eventCreated, nil
 }
 
-func (s *Service) GetEvents() ([]model.Event, error) {
-	eventsListed, err := s.Repository.GetEvents()
+func (s *Service) GetEvents(userId string) ([]model.Event, error) {
+	eventsListed, err := s.Repository.GetEvents(userId)
 
 	if err != nil {
 		return nil, err
@@ -131,9 +133,9 @@ func (s *Service) GetEvents() ([]model.Event, error) {
 	return eventsListed, nil
 }
 
-func (s *Service) GetEvent(ID string) (*model.Event, error) {
+func (s *Service) GetEvent(userID,ID string) (*model.Event, error) {
 
-	updatedEvent, err := s.Repository.GetEvent(ID)
+	updatedEvent, err := s.Repository.GetEvent(userID,ID)
 
 	if err != nil {
 		return nil, err
@@ -142,9 +144,9 @@ func (s *Service) GetEvent(ID string) (*model.Event, error) {
 	return updatedEvent, nil
 }
 
-func (s *Service) DeleteEvent(ID string) error {
+func (s *Service) DeleteEvent(userId,ID string) error {
 
-	err := s.Repository.DeleteEvent(ID)
+	err := s.Repository.DeleteEvent(userId,ID)
 
 	if err != nil {
 		return err

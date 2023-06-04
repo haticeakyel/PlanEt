@@ -22,7 +22,7 @@ import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import EventList from './EventList';
 import { authUser } from '../actions/userAction';
-import { IconButton } from '@mui/material';
+import { Dialog, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteEvent from './DeleteEvent';
 
@@ -71,7 +71,12 @@ function FullCalendarApp(props) {
     setDeleteEvent(true);
   };
 
-  // Generate the background image URL based on the selected month
+  const handleEventDoubleClick = (info) => {
+    <Dialog>heyy</Dialog>
+    console.log('Double-clicked event:', info.event);
+    // Open the dialog or perform any other action here
+  };
+
   const getSelectedMonthImage = () => {
     const imageURLs = [
       january,
@@ -152,9 +157,10 @@ function FullCalendarApp(props) {
               style={{
                 backgroundColor: 'rgba(0, 0, 0, 0.5)', // Set the background color to transparent
                 padding: '4px',
+                display: 'flex',
               }}
+              onDoubleClick={() => handleEventDoubleClick(eventContent)}
             >
-              <div>{eventContent.timeText}</div>
               <div>{eventContent.event.title}</div>
               <IconButton
                 aria-label="delete"
