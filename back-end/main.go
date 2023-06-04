@@ -31,6 +31,7 @@ func SetupApp(api *Api) *fiber.App {
 	app.Get("/users/:userId/events", api.HandleGetEvents)
 	app.Get("/users/:userId/events/:id", api.HandleGetEvent)
 	app.Delete("/users/:userId/events/:id", api.HandleDeleteEvent)
+	app.Put("/users/:userId/events/:id", api.HandleUpdateEvent)
 
 	return app
 }

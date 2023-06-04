@@ -133,9 +133,9 @@ func (s *Service) GetEvents(userId string) ([]model.Event, error) {
 	return eventsListed, nil
 }
 
-func (s *Service) GetEvent(userID,ID string) (*model.Event, error) {
+func (s *Service) GetEvent(userID, ID string) (*model.Event, error) {
 
-	updatedEvent, err := s.Repository.GetEvent(userID,ID)
+	updatedEvent, err := s.Repository.GetEvent(userID, ID)
 
 	if err != nil {
 		return nil, err
@@ -144,13 +144,35 @@ func (s *Service) GetEvent(userID,ID string) (*model.Event, error) {
 	return updatedEvent, nil
 }
 
-func (s *Service) DeleteEvent(userId,ID string) error {
+func (s *Service) DeleteEvent(userId, ID string) error {
 
-	err := s.Repository.DeleteEvent(userId,ID)
+	err := s.Repository.DeleteEvent(userId, ID)
 
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func (s *Service) UpdateEvent(userId, ID string, eventDTO model.EventDTO) (*model.Event, error) {
+
+	event, err := s.Repository.GetEvent(userId, ID)
+	if err != nil {
+		return nil, err
+	}
+
+	event.Title = eventDTO.Title
+	event.Description = eventDTO.Description
+	event.Status = eventDTO.Status
+	event.StartDate = eventDTO.StartDate
+	event.EndDate = eventDTO.EndDate
+
+	updatedEvent, err := s.Repository.UpdateEvent(userId, *event)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return updatedEvent, nil
 }

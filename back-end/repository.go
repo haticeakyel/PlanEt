@@ -135,3 +135,23 @@ func (repository *Repository) DeleteEvent(userId, ID string) error {
 
 	return nil
 }
+
+func (repository *Repository) UpdateEvent(userId string, event model.Event) (*model.Event, error) {
+	collection := repository.client.Database("register").Collection("event")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	filter := bson.M{"id": event.ID}
+
+	result := collection.FindOneAndReplace(ctx, filter, event)
+	if result == nil {
+		return nil, result.Err()
+	}
+
+	updatedEvent, err := repository.GetEvent(userId, event.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return updatedEvent, nil
+}

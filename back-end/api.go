@@ -199,3 +199,26 @@ func (a *Api) HandleDeleteEvent(c *fiber.Ctx) error {
 
 	return nil
 }
+
+func (a *Api) HandleUpdateEvent(c *fiber.Ctx) error {
+	userId := c.Params("userId")
+	ID := c.Params("id")
+
+	eventDTO := model.EventDTO{}
+	err := c.BodyParser(&eventDTO)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return err
+	}
+
+	event, err := a.Service.UpdateEvent(userId,ID, eventDTO)
+
+	switch err {
+	case nil:
+		c.JSON(event)
+		c.Status(fiber.StatusOK)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+	return nil
+}
