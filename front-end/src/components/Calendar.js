@@ -21,9 +21,10 @@ import { fetchEvents } from '../actions/eventAction';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { authUser } from '../actions/userAction';
-import { Dialog, IconButton } from '@mui/material';
+import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteEvent from './DeleteEvent';
+import UpdateEvent from './UpdateEvent';
 
 function FullCalendarApp(props) {
   const {
@@ -37,6 +38,9 @@ function FullCalendarApp(props) {
   const [addEvent, setAddEvent] = useState(false);
   const [deleteEvent, setDeleteEvent] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [updatedEvent, setUpdatedEvent] = useState({})
+  const [editEvent, setEditEvent] = useState(false);
+  
 
   const handleEventAdd = (eventInfo) => {
     const newEvent = {
@@ -71,10 +75,14 @@ function FullCalendarApp(props) {
     setDeleteEvent(true);
   };
 
-  const handleEventDoubleClick = (info) => {
-    <Dialog>heyy</Dialog>
-    console.log('Double-clicked event:', info.event);
-    // Open the dialog or perform any other action here
+  const handleEditEventClose = () => {
+    setEditEvent(false);
+  };
+  const handleEventDoubleClick = (event) => {
+    setSelectedEvent(event);
+    console.log('Double-clicked event:', event);
+    console.log(selectedEvent)
+    setEditEvent(true)
   };
 
   const getSelectedMonthImage = () => {
@@ -107,11 +115,14 @@ function FullCalendarApp(props) {
     if (!hasCookie) {
       navigate('/login');
     } else {
-      fetchEvents(userId);
       authUser();
     }
   }, [navigate, fetchEvents, authUser]);
 
+  useEffect(() => {
+    fetchEvents(userId)
+  }, [userId])
+  
   return (
     <>
       <Header />
@@ -133,6 +144,8 @@ function FullCalendarApp(props) {
         ></div>
         <AddEvent open={addEvent} onClose={handleAddEventClose} />
 
+        <UpdateEvent open={editEvent} onClose={handleEditEventClose} eventId={updatedEvent}/>
+
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           headerToolbar={{
@@ -146,8 +159,9 @@ function FullCalendarApp(props) {
           }}
           selectable={true}
           select={handleEventAdd}
-          events={events.events && events.events.map((event) => ({
+          events={events.events && events.events.map((event) =>  ( {
             title: event.title,
+            description: event.description,
             start: event.startDate,
             end: event.endDate,
             id: event.id,
@@ -159,7 +173,11 @@ function FullCalendarApp(props) {
                 padding: '4px',
                 display: 'flex',
               }}
-              onDoubleClick={() => handleEventDoubleClick(eventContent)}
+              onDoubleClick={() =>{
+                setUpdatedEvent(eventContent.event.id)
+                console.log(eventContent.event.description,"dene")
+                setEditEvent(true)
+              }}
             >
               <div>{eventContent.event.title}</div>
               <IconButton

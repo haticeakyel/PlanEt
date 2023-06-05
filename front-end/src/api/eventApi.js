@@ -25,6 +25,12 @@ export const listEventApi = async (userId) => {
     return resp;
 };
 
+export const getEventbyIdApi = async (userId, id) => {
+
+  const resp = await axios.get(`http://localhost:3001/users/${userId}/events/${id}`);
+  return resp;
+};
+
 export const deleteEventApi = async (userId, id) => {
   const resp = await axios.delete(`http://localhost:3001/users/${userId}/events/${id}`);
   return resp.status === 204;

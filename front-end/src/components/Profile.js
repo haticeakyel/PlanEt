@@ -60,6 +60,8 @@ function Profile(props) {
     },
   })(Dialog);
 
+  const isUserDataAvailable = user && user.name && user.surName && user.email && user.phoneNumber && user.birthDate;
+
   const navigate = useNavigate();
   useEffect(() => {
     const hasCookie = document.cookie.includes('user_token');
@@ -77,8 +79,8 @@ function Profile(props) {
 
   return (
     <>
-      <img src={planets} className={classes.img} /> 
-    <Header />
+    {isUserDataAvailable && <Header />}
+    <img src={planets} className={classes.img} /> 
     <div className="App" style={{ justifyContent: "center", display: "flex", flexDirection: "column"}}>
     
     <h1 style={{display:"flex", justifyContent:"center"}}>Your Profile</h1>
