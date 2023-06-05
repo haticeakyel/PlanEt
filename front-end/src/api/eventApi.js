@@ -36,7 +36,7 @@ export const deleteEventApi = async (userId, id) => {
   return resp.status === 204;
 };
 
-export const updateEvent = async (userId, id, data) => {
+export const updateEventApi = async (userId, id, data) => {
   const formattedStartDate = dayjs(data.startDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
   const formattedEndDate = dayjs(data.endDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
 

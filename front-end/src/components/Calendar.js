@@ -169,13 +169,12 @@ function FullCalendarApp(props) {
           eventContent={(eventContent) => (
             <div
               style={{
-                backgroundColor: 'rgba(0, 0, 0, 0.5)', // Set the background color to transparent
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
                 padding: '4px',
                 display: 'flex',
               }}
               onDoubleClick={() =>{
                 setUpdatedEvent(eventContent.event.id)
-                console.log(eventContent.event.description,"dene")
                 setEditEvent(true)
               }}
             >

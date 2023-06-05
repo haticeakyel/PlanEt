@@ -9,6 +9,9 @@ import { fetchEventById } from '../actions/anEventAction';
 import { updateEvent } from '../actions/eventAction';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { updateEventApi } from '../api/eventApi';
+import { fetchEvents } from '../actions/eventAction';
+import { useNavigate } from 'react-router-dom';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -23,7 +26,8 @@ function UpdateEvent(props) {
     userId,
     fetchEventById,
     event,
-    updateEvent
+    updateEvent,
+    events
   } = props;
 
   const [title, setTitle] = useState(event.title);
@@ -34,37 +38,59 @@ function UpdateEvent(props) {
   const [alert, setAlert] = useState({ open: false, message: "", status: "" }); 
   const [fetchedEvent, setFetchedEvent] = useState("")
   
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const hasCookie = document.cookie.includes('user_token');
+    if (!hasCookie) {
+      navigate('/login');
+    } else {
+      
+    }
+  }, [navigate]);
+
   useEffect(() => {
    fetchEventById(userId, eventId)
    
   }, [open])
+  
   useEffect(() => {
     setTitle(event.title)
     setDescription(event.description)
     setStatus(event.status)
+
   }, [event])
   
   const handleClick = async () => {
-    
-    
-/*     const updatedEvent = {
+    const updatedEvent = {
       id: eventId,
-      title: title,
-      description: description,
-      status: status,
+      title,
+      description,
+      status,
       startDate: startDateTime,
       endDate: endDateTime,
     };
-
+  
     try {
-      await updateEvent(userId, updatedEvent);
-      setAlert({ open: true, message: "Event updated successfully", status: "success" });
-      onClose();
+      const response = await updateEventApi(userId, eventId, updatedEvent);
+      if (response) {
+        updateEvent(updatedEvent);
+        
+        setAlert({
+          open: true,
+          message: "Event updated successfully",
+          status: "success",
+        });
+        onClose();
+      } else {
+        throw new Error("Event update failed");
+      }
     } catch (error) {
-      console.log('Error updating event:', error);
+      console.log("Error updating event:", error);
       setAlert({ open: true, message: "Error updating event", status: "error" });
-    } */
+    }
   };
+  
 
   const isDisabled = () => {
     return !title || !description;
@@ -164,8 +190,8 @@ function UpdateEvent(props) {
 
 const mapStateToProps = (state) => ({
   userId: state.user.id,
-  events: state.events,
-  event: state.event
+  event: state.event,
+  events: state.events
 });
 
 const mapDispatchToProps = (dispatch) => ({
