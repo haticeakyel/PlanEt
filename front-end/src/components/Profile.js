@@ -91,7 +91,6 @@ function Profile(props) {
           { label: "Surname", value: user.surName },
           { label: "Email", value: user.email },
           { label: "Phone Number", value: user.phoneNumber },
-          { label: "Birth Day", value: user.birthDate ? new Date(user.birthDate).toLocaleDateString('en-GB') : "" },
         ].map((item) => (
           <ListItem key={item.label}>
             <ListItemText primary={`${item.label}: ${item.value}`} />
