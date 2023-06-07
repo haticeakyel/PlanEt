@@ -12,7 +12,6 @@ import timezone from 'dayjs/plugin/timezone';
 import { updateEventApi } from '../api/eventApi';
 import { fetchEvents } from '../actions/eventAction';
 import { useNavigate } from 'react-router-dom';
-import { format } from 'dayjs';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -34,8 +33,8 @@ function UpdateEvent(props) {
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description);
   const [status, setStatus] = useState(event.status);
-  const [startDateTime, setStartDateTime] = useState(new Date(event.startDate));
-  const [endDateTime, setEndDateTime] = useState(new Date(event.endDate));
+  const [startDateTime, setStartDateTime] = useState(dayjs(event.startDate));
+  const [endDateTime, setEndDateTime] = useState(dayjs(event.endDate));
   const [alert, setAlert] = useState({ open: false, message: "", status: "" }); 
   const [fetchedEvent, setFetchedEvent] = useState("");
   
@@ -58,6 +57,8 @@ function UpdateEvent(props) {
     setTitle(event.title);
     setDescription(event.description);
     setStatus(event.status);
+    setStartDateTime(dayjs(event.startDate));
+    setEndDateTime(dayjs(event.endDate));
   }, [event]);
   
   const handleClick = async () => {
