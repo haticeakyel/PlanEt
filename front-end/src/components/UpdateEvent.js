@@ -12,6 +12,7 @@ import timezone from 'dayjs/plugin/timezone';
 import { updateEventApi } from '../api/eventApi';
 import { fetchEvents } from '../actions/eventAction';
 import { useNavigate } from 'react-router-dom';
+import { format } from 'dayjs';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -27,16 +28,16 @@ function UpdateEvent(props) {
     fetchEventById,
     event,
     updateEvent,
-    events
+    fetchEvents
   } = props;
 
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description);
   const [status, setStatus] = useState(event.status);
-  const [startDateTime, setStartDateTime] = useState(dayjs(event.startDate));
-  const [endDateTime, setEndDateTime] = useState(dayjs(event.endDate));
+  const [startDateTime, setStartDateTime] = useState(new Date(event.startDate));
+  const [endDateTime, setEndDateTime] = useState(new Date(event.endDate));
   const [alert, setAlert] = useState({ open: false, message: "", status: "" }); 
-  const [fetchedEvent, setFetchedEvent] = useState("")
+  const [fetchedEvent, setFetchedEvent] = useState("");
   
   const navigate = useNavigate();
 
@@ -50,16 +51,14 @@ function UpdateEvent(props) {
   }, [navigate]);
 
   useEffect(() => {
-   fetchEventById(userId, eventId)
-   
-  }, [open])
+    fetchEventById(userId, eventId);
+  }, [open]);
   
   useEffect(() => {
-    setTitle(event.title)
-    setDescription(event.description)
-    setStatus(event.status)
-
-  }, [event])
+    setTitle(event.title);
+    setDescription(event.description);
+    setStatus(event.status);
+  }, [event]);
   
   const handleClick = async () => {
     const updatedEvent = {
@@ -72,26 +71,20 @@ function UpdateEvent(props) {
     };
   
     try {
-      const response = await updateEventApi(userId, eventId, updatedEvent);
-      if (response) {
-        updateEvent(updatedEvent);
-        
-        setAlert({
-          open: true,
-          message: "Event updated successfully",
-          status: "success",
-        });
-        onClose();
-      } else {
-        throw new Error("Event update failed");
-      }
+      await updateEventApi(userId, eventId, updatedEvent);
+      updateEvent(updatedEvent);
+      setAlert({
+        open: true,
+        message: "Event updated successfully",
+        status: "success",
+      });
     } catch (error) {
-      console.log("Error updating event:", error);
-      setAlert({ open: true, message: "Error updating event", status: "error" });
+    } finally {
+      fetchEvents(userId);
+      onClose();
     }
   };
   
-
   const isDisabled = () => {
     return !title || !description;
   };
@@ -102,27 +95,25 @@ function UpdateEvent(props) {
 
   const handleStartDateTimeChange = (newStartDateTime) => {
     setStartDateTime(newStartDateTime);
-
-    if (endDateTime.isBefore(newStartDateTime)) {
+  
+    if (endDateTime < newStartDateTime) {
       setEndDateTime(newStartDateTime);
     }
   };
-
+  
   const handleEndDateTimeChange = (newEndDateTime) => {
     setEndDateTime(newEndDateTime);
-
-    if (newEndDateTime.isBefore(startDateTime)) {
+  
+    if (newEndDateTime < startDateTime) {
       setStartDateTime(newEndDateTime);
     }
   };
-
     
   return (
     <div>
       <Dialog open={open} onClose={onClose}>
         <DialogTitle style={{ textAlign: "center" }} id="add-new-event-dialog-title">Update Event</DialogTitle>
         <DialogContent>
-
           <TextField
             required
             autoFocus
@@ -162,7 +153,6 @@ function UpdateEvent(props) {
               </DemoItem>
             </DemoContainer>
           </LocalizationProvider>
-
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="primary">
@@ -198,8 +188,11 @@ const mapDispatchToProps = (dispatch) => ({
   fetchEventById: (userId, event) => {
     return dispatch(fetchEventById(userId, event));
   },
-  updateEvent: (userId, event) => {
-    return dispatch(updateEvent(userId, event));
+  updateEvent: (event) => {
+    return dispatch(updateEvent(event));
+  },
+  fetchEvents: (userId) => {
+    return dispatch(fetchEvents(userId));
   },
 });
 

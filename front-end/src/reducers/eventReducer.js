@@ -9,16 +9,16 @@ const EventReducer = (state = {}, action) => {
             return { ...state, events: [...state.events].filter((item) => item.id !== action.payload) };
         case UPDATE_EVENT:
             const editData = {...state}
-            editData.map((item, index) =>{
+            editData.events.map((item, index) =>{
                 if(action.payload.id == item.id){
-                    editData[index].title = action.payload.title
-                    editData[index].description= action.payload.description
-                    editData[index].status = action.payload.status
-                    editData[index].startDate = action.payload.startDate;
-                    editData[index].endDate = action.payload.endDate;
+                    editData.events[index].title = action.payload.title
+                    editData.events[index].description= action.payload.description
+                    editData.events[index].status = action.payload.status
+                    editData.events[index].startDate = action.payload.startDate;
+                    editData.events[index].endDate = action.payload.endDate;
                     } 
             })
-            return editData
+            return {...state, events: editData.events}
         default:
             return state
     }
